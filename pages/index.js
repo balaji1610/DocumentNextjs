@@ -2,8 +2,8 @@ import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
-
-export default function Home() {
+import { getSortedPostsData } from "../lib/posts";
+export default function Home({ allPostsData }) {
   return (
     <Layout home>
       <Head>
@@ -28,8 +28,34 @@ export default function Home() {
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p> */}
       </section>
-      <span className="bg_profilepage"><Link href="/posts/first-post">Click Profile Page</Link></span>
-      
+      <span className="bg_profilepage">
+        <Link href="/posts/first-post">Click Profile Page</Link>
+      </span>
+
+      <section>
+        <div>
+          {" "}
+          <ul>
+            {allPostsData.map(({ id, title, date }) => (
+              <li key={id}>
+                {title}
+                <br />
+                {id}
+                <br />
+                {date}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </Layout>
   );
+}
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData();
+  return {
+    props: {
+      allPostsData,
+    },
+  };
 }
